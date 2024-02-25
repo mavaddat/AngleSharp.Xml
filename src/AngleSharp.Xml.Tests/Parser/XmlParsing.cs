@@ -1,8 +1,9 @@
 namespace AngleSharp.Xml.Tests.Parser
 {
+    using AngleSharp.Dom;
     using AngleSharp.Xml.Parser;
     using NUnit.Framework;
-    using System;
+    using System.Linq;
 
     [TestFixture]
     public class XmlParsing
@@ -145,6 +146,14 @@ namespace AngleSharp.Xml.Tests.Parser
                 });
                 parser.ParseDocument(source);
             });
+        }
+
+        [Test]
+        public void XmlPrefixedAttributesShouldLocateXmlNamespaceWithoutDeclaration()
+        {
+            var document = @"<xml xml:lang=""en""></xml>".ToXmlDocument();
+            var root = document.DocumentElement;
+            Assert.AreEqual(NamespaceNames.XmlUri, root.Attributes.Single().NamespaceUri);
         }
     }
 }
