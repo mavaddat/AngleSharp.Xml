@@ -1,3 +1,10 @@
+# 1.2.0
+
+Released on Friday, August 21 2026.
+
+- Added the XML-specific `CData` factory (#29)
+- Added support for XML document metadata (#29)
+
 # 1.1.0
 
 Released on Friday, July 31 2026.

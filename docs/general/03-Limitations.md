@@ -14,6 +14,10 @@ AngleSharp.Xml does not provide a full XSD validation subsystem. If strict schem
 
 AngleSharp.Xml is centered on AngleSharp DOM operations and selector-based querying. If your architecture requires XPath-first querying, plan for an additional library.
 
+## Entity reference nodes
+
+AngleSharp's core DOM does not expose entity reference nodes. `IXmlDocument.CreateEntityReference` explicitly throws `NotSupportedException`; entity references encountered while parsing are resolved to replacement text instead.
+
 ## Error suppression tradeoff
 
 When IsSuppressingErrors is enabled, malformed input may still produce a DOM, but document structure can be surprising. Treat this as recovery mode, not strict validation mode.

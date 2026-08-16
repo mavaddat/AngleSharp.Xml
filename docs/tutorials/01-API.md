@@ -126,6 +126,30 @@ var item = document.QuerySelector("item");
 item.SetAttribute("status", "active");
 ```
 
+### XML declaration metadata
+
+`IXmlDocument` exposes the parsed XML declaration. Documents without a declaration use XML 1.0 defaults and have a null `XmlEncoding`.
+
+```cs
+var document = parser.ParseDocument(
+	"<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\"?><root />");
+
+Console.WriteLine(document.XmlVersion);    // 1.0
+Console.WriteLine(document.XmlEncoding);   // utf-8
+Console.WriteLine(document.XmlStandalone); // true
+```
+
+### CDATA sections
+
+Create XML-native CDATA sections through `IXmlDocument`. Parsed CDATA sections are also preserved as `IXmlCDataSection` nodes during DOM transformations and XML serialization.
+
+```cs
+var section = document.CreateCDataSection("<unescaped>content</unescaped>");
+document.DocumentElement.AppendChild(section);
+```
+
+AngleSharp's core DOM does not expose entity reference nodes. `CreateEntityReference` therefore throws `NotSupportedException`; parsed entity references continue to be resolved to their replacement text.
+
 ## DTD validity signal
 
 When a document contains DOCTYPE declarations, AngleSharp.Xml evaluates DTD-related validity and exposes the result via `document.IsValid`.

@@ -18,6 +18,8 @@ AngleSharp.Xml extends the AngleSharp ecosystem with XML-native parsing and seri
 - Use AngleSharp DOM interfaces (IDocument, IElement, IAttr, INode)
 - Query and update XML nodes with the same API style used in AngleSharp
 - Manipulate attributes, text nodes, comments, and processing instructions
+- Inspect XML declaration version, encoding, and standalone metadata
+- Create and preserve XML CDATA section nodes
 
 ## Namespace handling
 

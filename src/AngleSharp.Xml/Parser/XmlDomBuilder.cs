@@ -196,6 +196,14 @@ namespace AngleSharp.Xml.Parser
                 var declarationToken = (XmlDeclarationToken)token;
                 _standalone = declarationToken.Standalone;
 
+                if (_document is XmlDocument xmlDocument)
+                {
+                    xmlDocument.SetDeclaration(
+                        declarationToken.Version,
+                        declarationToken.IsEncodingMissing ? null : declarationToken.Encoding,
+                        declarationToken.Standalone);
+                }
+
                 if (!declarationToken.IsEncodingMissing)
                 {
                     SetEncoding(declarationToken.Encoding);
@@ -387,7 +395,16 @@ namespace AngleSharp.Xml.Parser
                 case XmlTokenType.CData:
                 {
                     var cdataToken = (XmlCDataToken)token;
-                    CurrentNode.AppendText(cdataToken.Data);
+
+                    if (_document is IXmlDocument xmlDocument)
+                    {
+                        CurrentNode.AppendChild(xmlDocument.CreateCDataSection(cdataToken.Data));
+                    }
+                    else
+                    {
+                        CurrentNode.AppendText(cdataToken.Data);
+                    }
+
                     break;
                 }
                 case XmlTokenType.Character:
