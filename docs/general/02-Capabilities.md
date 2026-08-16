@@ -37,6 +37,8 @@ AngleSharp.Xml extends the AngleSharp ecosystem with XML-native parsing and seri
 - Serialize to XML-oriented output with ToXml
 - Use auto-selected formatter behavior with ToMarkup
 - Configure empty-element behavior using XmlMarkupFormatter.IsAlwaysSelfClosing
+- Serialize documents and rooted element subtrees using Canonical XML 1.1
+- Serialize using Exclusive XML Canonicalization 1.0 with inclusive namespace prefixes
 
 ## Diagnostics and control
 

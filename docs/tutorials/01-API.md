@@ -110,6 +110,31 @@ var formatter = new XmlMarkupFormatter
 var xml = document.ToHtml(formatter);
 ```
 
+### Canonical XML
+
+`ToCanonicalXml` produces canonical UTF-8 bytes without a byte-order mark. Canonical XML 1.1 is the default mode.
+
+```cs
+var canonicalBytes = document.ToCanonicalXml();
+```
+
+Select Exclusive XML Canonicalization 1.0 and its inclusive namespace prefixes through options:
+
+```cs
+var options = new XmlCanonicalizationOptions
+{
+	Mode = XmlCanonicalizationMode.ExclusiveXml10,
+	IncludeComments = true,
+	InclusiveNamespacePrefixes = new[] { "ds", "#default" },
+};
+
+document.ToCanonicalXml(outputStream, options);
+```
+
+The stream overload leaves the destination stream open. Both modes remove XML declarations and doctypes, expand empty elements, replace CDATA boundaries with character content, normalize escaping, and order namespace declarations and attributes canonically.
+
+Canonicalization accepts complete documents and rooted element subtrees. Canonical XML 1.1 subtree output carries applicable ancestor namespace, `xml:lang`, `xml:space`, and fixed-up `xml:base` context. Exclusive mode emits visibly used namespaces plus any configured inclusive prefixes.
+
 ## DOM model and querying
 
 AngleSharp.Xml uses AngleSharp DOM interfaces and works with standard operations:

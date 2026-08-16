@@ -26,6 +26,10 @@ When IsSuppressingErrors is enabled, malformed input may still produce a DOM, bu
 
 Serialization behavior depends on the selected formatter. If deterministic output style is important, explicitly choose XmlMarkupFormatter and configure it instead of relying on auto-selection.
 
+## Canonical XML input scope
+
+Canonical serialization operates on the existing AngleSharp DOM and accepts complete documents or rooted element subtrees. It does not accept arbitrary XPath node sets. Canonical output therefore reflects the declarations, entity replacements, and default attributes materialized by the parser; the current partial DTD implementation may not materialize every default required by a validating XML processor.
+
 ## Performance and memory
 
 Like other DOM parsers, full-document parsing keeps an in-memory object graph. For very large inputs, consider chunking or stream-first preprocessing before constructing a full DOM.

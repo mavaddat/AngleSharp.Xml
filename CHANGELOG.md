@@ -5,6 +5,7 @@ Released on Friday, August 21 2026.
 - Improved preservation of CDATA sections as first-class DOM nodes (#30)
 - Added the XML-specific `CDATA` factory (#29)
 - Added support for XML document metadata (#29)
+- Added Canonical XML 1.1 and Exclusive XML Canonicalization 1.0 serialization (#34)
 
 # 1.1.0
 
