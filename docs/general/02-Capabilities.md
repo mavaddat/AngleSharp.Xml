@@ -20,6 +20,9 @@ AngleSharp.Xml extends the AngleSharp ecosystem with XML-native parsing and seri
 - Manipulate attributes, text nodes, comments, and processing instructions
 - Inspect XML declaration version, encoding, and standalone metadata
 - Create and preserve XML CDATA section nodes
+- Resolve effective XML Base URIs and URLs
+- Normalize and look up live `xml:id` values
+- Resolve inherited `xml:lang` values
 
 ## Namespace handling
 

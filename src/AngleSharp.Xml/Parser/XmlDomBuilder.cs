@@ -339,6 +339,12 @@ namespace AngleSharp.Xml.Parser
                     {
                         var attr = otherAttributes[i];
                         var item = CreateAttribute(attr.Key, attr.Value.Trim());
+
+                        if (item.NamespaceUri == NamespaceNames.XmlUri && item.LocalName == "id")
+                        {
+                            item.Value = XmlElementExtensions.NormalizeXmlId(item.Value);
+                        }
+
                         element.AddAttribute(item);
                     }
 

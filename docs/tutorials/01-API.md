@@ -151,6 +151,26 @@ var item = document.QuerySelector("item");
 item.SetAttribute("status", "active");
 ```
 
+### XML namespace semantics
+
+Common attributes from the XML namespace have convenience APIs on elements and documents.
+
+```cs
+var item = document.QuerySelector("item");
+
+var effectiveBaseUri = item.GetXmlBaseUri();
+var effectiveBaseUrl = item.GetXmlBaseUrl();
+var effectiveLanguage = item.GetXmlLanguage();
+var xmlId = item.GetXmlId();
+var target = document.GetElementByXmlId("chapter-1");
+```
+
+`GetXmlBaseUri` resolves inherited `xml:base` values against the document URL and returns non-ASCII LEIRI characters without escaping. `GetXmlBaseUrl` returns AngleSharp's URL representation, whose `Href` is URI-escaped.
+
+`GetXmlLanguage` returns the nearest inherited `xml:lang` value. An empty value resets inherited language information and is returned as an empty string; null means no language was declared.
+
+Parsed `xml:id` values receive ID whitespace normalization. `GetElementByXmlId` searches current DOM state in document order, so attribute mutations are reflected immediately.
+
 ### XML declaration metadata
 
 `IXmlDocument` exposes the parsed XML declaration. Documents without a declaration use XML 1.0 defaults and have a null `XmlEncoding`.
