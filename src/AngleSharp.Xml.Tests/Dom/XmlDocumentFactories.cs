@@ -62,6 +62,40 @@ namespace AngleSharp.Xml.Tests.Dom
         }
 
         [Test]
+        public void CDataLexicalBoundariesSurviveRoundTrip()
+        {
+            const String source = "<root><![CDATA[a]]>text<![CDATA[]]><![CDATA[b]]></root>";
+            var document = source.ToXmlDocument();
+
+            Assert.AreEqual(4, document.DocumentElement.ChildNodes.Length);
+            Assert.IsInstanceOf<IXmlCDataSection>(document.DocumentElement.ChildNodes[0]);
+            Assert.AreEqual(NodeType.Text, document.DocumentElement.ChildNodes[1].NodeType);
+            Assert.IsInstanceOf<IXmlCDataSection>(document.DocumentElement.ChildNodes[2]);
+            Assert.IsInstanceOf<IXmlCDataSection>(document.DocumentElement.ChildNodes[3]);
+            Assert.AreEqual(source, document.ToXml());
+        }
+
+        [Test]
+        public void ClonePreservesCDataSections()
+        {
+            var document = "<root><![CDATA[value]]></root>".ToXmlDocument();
+            var clone = (IXmlDocument)document.Clone();
+
+            Assert.IsInstanceOf<IXmlCDataSection>(clone.DocumentElement.FirstChild);
+            Assert.AreEqual(document.ToXml(), clone.ToXml());
+        }
+
+        [Test]
+        public void AutoSelectedFormatterPreservesCDataWithoutDoctype()
+        {
+            const String source = "<root><![CDATA[<value>]]></root>";
+            var document = source.ToXmlDocument();
+
+            Assert.AreEqual(source, document.ToMarkup());
+            Assert.AreEqual("<![CDATA[<value>]]>", document.DocumentElement.FirstChild.ToMarkup());
+        }
+
+        [Test]
         public void CreateCDataSectionRejectsClosingDelimiter()
         {
             var document = "<root />".ToXmlDocument();
@@ -70,11 +104,33 @@ namespace AngleSharp.Xml.Tests.Dom
         }
 
         [Test]
+        public void CDataMutationsRejectClosingDelimiterAtomically()
+        {
+            var document = "<root />".ToXmlDocument();
+
+            AssertMutationRejected(document.CreateCDataSection("safe"), section => section.Data = "]]>");
+            AssertMutationRejected(document.CreateCDataSection("safe"), section => section.NodeValue = "]]>");
+            AssertMutationRejected(document.CreateCDataSection("safe"), section => section.TextContent = "]]>");
+            AssertMutationRejected(document.CreateCDataSection("]]"), section => section.Append(">"));
+            AssertMutationRejected(document.CreateCDataSection("]]"), section => section.Insert(2, ">"));
+            AssertMutationRejected(document.CreateCDataSection("]]x>"), section => section.Delete(2, 1));
+            AssertMutationRejected(document.CreateCDataSection("safe"), section => section.Replace(0, 4, "]]>") );
+        }
+
+        [Test]
         public void CreateEntityReferenceIsExplicitlyUnsupported()
         {
             var document = "<root />".ToXmlDocument();
 
             Assert.Throws<NotSupportedException>(() => document.CreateEntityReference("entity"));
+        }
+
+        private static void AssertMutationRejected(IXmlCDataSection section, Action<IXmlCDataSection> mutation)
+        {
+            var original = section.Data;
+
+            Assert.Throws<DomException>(() => mutation(section));
+            Assert.AreEqual(original, section.Data);
         }
     }
 }

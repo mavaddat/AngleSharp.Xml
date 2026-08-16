@@ -54,13 +54,6 @@ namespace AngleSharp.Xml.Dom
 
         public IXmlCDataSection CreateCDataSection(String data)
         {
-            data = data ?? String.Empty;
-
-            if (data.Contains("]]>") )
-            {
-                throw new DomException(DomError.InvalidCharacter);
-            }
-
             return new XmlCDataSection(this, data);
         }
 

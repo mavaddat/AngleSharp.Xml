@@ -148,6 +148,8 @@ var section = document.CreateCDataSection("<unescaped>content</unescaped>");
 document.DocumentElement.AppendChild(section);
 ```
 
+CDATA content cannot contain the closing delimiter `]]>`. Creation and character-data mutations that would introduce it throw `DomException` without changing the section.
+
 AngleSharp's core DOM does not expose entity reference nodes. `CreateEntityReference` therefore throws `NotSupportedException`; parsed entity references continue to be resolved to their replacement text.
 
 ## DTD validity signal

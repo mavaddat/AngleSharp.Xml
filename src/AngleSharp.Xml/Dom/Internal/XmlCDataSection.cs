@@ -10,13 +10,24 @@ namespace AngleSharp.Xml.Dom
         internal XmlCDataSection(Document owner, String data)
             : base(owner, "#cdata-section", NodeType.CharacterData)
         {
-            _data = data;
+            _data = String.Empty;
+            Data = data;
         }
 
         public String Data
         {
             get => _data;
-            set => _data = value ?? String.Empty;
+            set
+            {
+                value = value ?? String.Empty;
+
+                if (value.Contains("]]>") )
+                {
+                    throw new DomException(DomError.InvalidCharacter);
+                }
+
+                _data = value;
+            }
         }
 
         public Int32 Length => _data.Length;
@@ -65,16 +76,16 @@ namespace AngleSharp.Xml.Dom
 
         public String Substring(Int32 offset, Int32 count) => _data.Substring(offset, Math.Min(count, _data.Length - offset));
 
-        public void Append(String data) => _data += data;
+        public void Append(String data) => Data = String.Concat(_data, data);
 
-        public void Insert(Int32 offset, String data) => _data = _data.Insert(offset, data);
+        public void Insert(Int32 offset, String data) => Data = _data.Insert(offset, data ?? String.Empty);
 
-        public void Delete(Int32 offset, Int32 count) => _data = _data.Remove(offset, Math.Min(count, _data.Length - offset));
+        public void Delete(Int32 offset, Int32 count) => Data = _data.Remove(offset, Math.Min(count, _data.Length - offset));
 
         public void Replace(Int32 offset, Int32 count, String data)
         {
-            Delete(offset, count);
-            Insert(offset, data);
+            var updated = _data.Remove(offset, Math.Min(count, _data.Length - offset));
+            Data = updated.Insert(offset, data ?? String.Empty);
         }
 
         public void Before(params INode[] nodes)
