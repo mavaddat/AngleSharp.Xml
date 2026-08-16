@@ -19,7 +19,7 @@ The public README describes the intended positioning: XML behavior that integrat
 
 - Primary development branch is `devel`.
 - The repository currently uses the Fallout build orchestrator, version 10.4.x in the checked-in build tooling.
-- The current project version in `src/Directory.Build.props` is `1.1.0`.
+- The current project version in `src/Directory.Build.props` is `1.2.0`.
 - The package's AngleSharp dependency defaults to version `1.5.0` and allows versions below `2.0.0`.
 - There is no repository-level AGENTS.md or copilot instruction file other than this one.
 - The worktree should be checked with `git status --short` before making assumptions about local changes. Never discard changes that are already present.
