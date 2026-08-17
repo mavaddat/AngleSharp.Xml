@@ -2,6 +2,7 @@
 
 Released on Friday, August 21 2026.
 
+- Updated to complete DTD identity and reference validation semantics (#31)
 - Improved preservation of CDATA sections as first-class DOM nodes (#30)
 - Added the XML-specific `CDATA` factory (#29)
 - Added support for XML document metadata (#29)

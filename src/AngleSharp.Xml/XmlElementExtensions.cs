@@ -116,6 +116,44 @@ namespace AngleSharp.Xml
         }
 
         /// <summary>
+        /// Gets the value of the DTD-declared ID attribute on an element.
+        /// </summary>
+        /// <param name="element">The element to inspect.</param>
+        /// <returns>The declared ID value, or null.</returns>
+        public static String GetDtdId(this IElement element)
+        {
+            if (element == null)
+            {
+                throw new ArgumentNullException(nameof(element));
+            }
+
+            return element is Dom.XmlElement xmlElement && xmlElement.IdAttribute != null ?
+                element.GetAttribute(xmlElement.IdAttribute) :
+                null;
+        }
+
+        /// <summary>
+        /// Finds the first element in document order with the given DTD-declared ID.
+        /// </summary>
+        /// <param name="document">The document to search.</param>
+        /// <param name="elementId">The ID to find.</param>
+        /// <returns>The matching element, or null.</returns>
+        public static IElement GetElementByDtdId(this IDocument document, String elementId)
+        {
+            if (document == null)
+            {
+                throw new ArgumentNullException(nameof(document));
+            }
+
+            if (elementId == null)
+            {
+                throw new ArgumentNullException(nameof(elementId));
+            }
+
+            return FindByDtdId(document.DocumentElement, elementId);
+        }
+
+        /// <summary>
         /// Gets the effective language from the nearest <c>xml:lang</c> declaration.
         /// </summary>
         /// <param name="element">The element to inspect.</param>
@@ -155,6 +193,31 @@ namespace AngleSharp.Xml
             foreach (var child in element.Children)
             {
                 var match = FindByXmlId(child, elementId);
+
+                if (match != null)
+                {
+                    return match;
+                }
+            }
+
+            return null;
+        }
+
+        private static IElement FindByDtdId(IElement element, String elementId)
+        {
+            if (element == null)
+            {
+                return null;
+            }
+
+            if (element.GetDtdId() == elementId)
+            {
+                return element;
+            }
+
+            foreach (var child in element.Children)
+            {
+                var match = FindByDtdId(child, elementId);
 
                 if (match != null)
                 {

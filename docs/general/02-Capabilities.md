@@ -34,6 +34,9 @@ AngleSharp.Xml extends the AngleSharp ecosystem with XML-native parsing and seri
 
 - Produces XML documents and SVG documents depending on content type
 - Works with XML-oriented workflows in mixed markup processing pipelines
+- Validates DTD ID uniqueness and IDREF / IDREFS references
+- Validates ENTITY / ENTITIES against declared unparsed entities and notations
+- Looks up elements by their DTD-declared ID attributes
 
 ## Serialization
 
