@@ -49,6 +49,9 @@ AngleSharp.Xml extends the AngleSharp ecosystem with XML-native parsing and seri
 - Keep source references for analysis or tooling
 - Observe element creation positions via callback hooks
 - Subscribe to parser lifecycle events (Parsing, Parsed, Error)
+- Validate existing documents against one or more XSD 1.0 schemas
+- Collect XSD errors and warnings with available source locations
+- Resolve trusted schema imports and includes through a configured resolver
 
 ## Typical high-value scenarios
 

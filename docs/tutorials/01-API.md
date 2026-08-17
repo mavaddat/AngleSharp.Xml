@@ -135,6 +135,51 @@ The stream overload leaves the destination stream open. Both modes remove XML de
 
 Canonicalization accepts complete documents and rooted element subtrees. Canonical XML 1.1 subtree output carries applicable ancestor namespace, `xml:lang`, `xml:space`, and fixed-up `xml:base` context. Exclusive mode emits visibly used namespaces plus any configured inclusive prefixes.
 
+### XSD validation
+
+Validate an existing document against one or more inline XML Schema 1.0 documents:
+
+```cs
+var result = document.ValidateXsd(commonSchema, documentSchema);
+
+if (!result.IsValid)
+{
+	foreach (var diagnostic in result.Diagnostics)
+	{
+		Console.WriteLine($"{diagnostic.Severity}: {diagnostic.Message} ({diagnostic.LineNumber}:{diagnostic.LinePosition})");
+	}
+}
+```
+
+Validation collects errors and warnings by default. Use options to stop after the first error or suppress warnings:
+
+```cs
+var options = new XsdValidationOptions
+{
+	IsFailFast = true,
+	IsReportingWarnings = false,
+};
+
+var result = document.ValidateXsd(schemas, options);
+```
+
+For schemas using `xs:include` or `xs:import` with locations, configure a `System.Xml.Schema.XmlSchemaSet` with source URIs and a resolver, then pass it to `ValidateXsd`. External resolution is disabled by default; enable a resolver only for trusted schema locations.
+
+```cs
+var schemas = new XmlSchemaSet
+{
+	XmlResolver = new XmlUrlResolver(),
+};
+schemas.Add(null, schemaPath);
+
+var result = document.ValidateXsd(schemas, new XsdValidationOptions
+{
+	SchemaResolver = new XmlUrlResolver(),
+});
+```
+
+Diagnostic locations refer to the current serialized DOM used for post-parse validation. A source URI is included when the document or configured schema provides one.
+
 ## DOM model and querying
 
 AngleSharp.Xml uses AngleSharp DOM interfaces and works with standard operations:

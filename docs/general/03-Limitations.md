@@ -6,9 +6,11 @@ section: "AngleSharp.Xml"
 
 AngleSharp.Xml is designed for practical XML parsing and DOM workflows in the AngleSharp ecosystem. It is not intended to replace every specialized XML stack.
 
-## Not a full XML schema stack
+## XSD validation scope
 
-AngleSharp.Xml does not provide a full XSD validation subsystem. If strict schema validation is required, pair it with dedicated validation tools.
+XSD validation targets XML Schema 1.0 through the platform `System.Xml.Schema` engine. XML Schema 1.1 is not supported. Validation operates on the current serialized DOM after parsing, so diagnostic line positions describe that representation rather than necessarily matching the original source after DOM mutations.
+
+External schema imports and includes are disabled by default. A configured resolver should only be enabled for trusted schema locations.
 
 ## Query model differences
 
@@ -48,6 +50,6 @@ Use AngleSharp.Xml when you want:
 
 Use additional tooling when you need:
 
-- Strict schema validation
+- XML Schema 1.1 validation
 - XPath-centric querying
 - Specialized industry-specific XML validation stacks
